@@ -62,6 +62,7 @@ include_directories(
 	${BASE_LOCATION}/include/firmata
 	${BASE_LOCATION}/include/serial
 	${BASE_LOCATION}/include/config
+	${BASE_LOCATION}/include/spyfly
 )
 
 # Add project sources
@@ -72,6 +73,7 @@ set(SOURCES
 	${BASE_LOCATION}/source/protocol/firmata/FirmataMarshaller.cpp
 	${BASE_LOCATION}/source/protocol/firmata/FirmataParser.cpp
 	${BASE_LOCATION}/source/protocol/serial/Serial.cpp
+	${BASE_LOCATION}/source/protocol/spyfly/spyfly.cpp
 )
 
 ##### Outputs #####

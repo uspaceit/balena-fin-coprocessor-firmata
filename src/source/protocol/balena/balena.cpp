@@ -1,4 +1,5 @@
 #include "balena.h"
+#include "spyfly.h"
 
 /******************************************************************************
  * @brief  Balena Definitions
@@ -134,6 +135,9 @@ void balenaInit()
   initMCU();
   initGPIO();
   initTimer();
+  // spyfly is initialized as soon as GPIO is initialized
+  // in order to make button press last as short as possible
+  spyflyInit();
   initADC();
   initPWM();
   initIDAC();

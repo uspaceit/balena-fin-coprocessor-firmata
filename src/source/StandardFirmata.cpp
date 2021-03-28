@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include "spyfly.h"
 
 SerialClass Serial;
 
@@ -920,6 +921,8 @@ int main(void)
     {
       Firmata.processInput();
     }
+
+    spyflyRun();
 
     // TODO - ensure that Stream buffer doesn't go over 60 bytes
     currentMillis = millis();
