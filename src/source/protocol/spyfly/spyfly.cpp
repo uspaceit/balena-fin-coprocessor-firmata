@@ -25,6 +25,14 @@
 #define GPIO_PORT_UI_LED               gpioPortC
 #define GPIO_PIN_UI_LED                10
 
+/*************************************************
+ * UI_LED - 2
+ * PB13
+ * PIN 4
+ ************************************************/
+#define GPIO_PORT_BUZZER               gpioPortB
+#define GPIO_PIN_BUZZER                13
+
 uint32_t nowtime;
 uint32_t prevtime_led;
 uint32_t prevtime_button;
@@ -35,8 +43,10 @@ bool ui_led_state;
 void spyflyInit() {
   GPIO_PinModeSet(GPIO_PORT_POWER, GPIO_PIN_POWER, gpioModeWiredAndPullUp, 1);
   GPIO_PinModeSet(GPIO_PORT_READ_BUTTON, GPIO_PIN_READ_BUTTON, gpioModeInput, 1);
-  GPIO_PinModeSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED, gpioModeWiredAnd, 1);
+  GPIO_PinModeSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED, gpioModePushPull, 1);
+  GPIO_PinModeSet(GPIO_PORT_BUZZER, GPIO_PIN_BUZZER, gpioModeWiredAndPullUp, 1);
   GPIO_PinOutSet(GPIO_PORT_POWER, GPIO_PIN_POWER);
+  GPIO_PinOutClear(GPIO_PORT_BUZZER, GPIO_PIN_BUZZER);
   GPIO_PinOutSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
 
   prevtime_led = RTCDRV_GetWallClock();
@@ -60,25 +70,32 @@ void spyflyRun() {
   nowtime = RTCDRV_GetWallClock();
   printf("########################\n");
   printf("Spyfly main running %d\n", nowtime);
-  printf("GPIO_PORT_READ_BUTTON state: %d\n\n", digitalRead(6));
+  // printf("GPIO_PORT_READ_BUTTON state: %d\n\n", digitalRead(6));  
 
-  if ((nowtime-prevtime_led) > 10) {
-    if (ui_led_state) {
-      GPIO_PinOutClear(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
-    } else {
-      GPIO_PinOutSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
-    }
-    prevtime_led = nowtime;
-  }
+  GPIO_PinOutSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
+  // if ((nowtime-prevtime_led) > 10) {
+  //   if (ui_led_state) {
+  //     GPIO_PinOutClear(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
+  //   } else {
+  //     GPIO_PinOutSet(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED);
+  //   }
+  //   prevtime_led = nowtime;
+  // }
 
-  button_state = GPIO_PinInGet(GPIO_PORT_READ_BUTTON, GPIO_PIN_READ_BUTTON);
-  if (button_state && button_prev_state) {
-    if ((nowtime-prevtime_button) > 5) {
-      // simulating shut down
-      flicker(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED, 5, 100);
-    }
-  } else {
-    prevtime_button = nowtime;
-  }
-  button_prev_state = button_state;
+  // // flicker on button press for 5 seconds
+  // button_state = GPIO_PinInGet(GPIO_PORT_READ_BUTTON, GPIO_PIN_READ_BUTTON);
+  // if (button_state && button_prev_state) {
+  //   if ((nowtime-prevtime_button) > 5) {
+  //     // simulating shut down
+  //     flicker(GPIO_PORT_UI_LED, GPIO_PIN_UI_LED, 5, 1000);
+  //   }
+  // } else {
+  //   prevtime_button = nowtime;
+  // }
+  // button_prev_state = button_state;
+
+  // buzzer alarm
+  // GPIO_PinOutSet(GPIO_PORT_BUZZER, GPIO_PIN_BUZZER);
+  // RTCDRV_Delay(1000);
+  // GPIO_PinOutClear(GPIO_PORT_BUZZER, GPIO_PIN_BUZZER);
 }
